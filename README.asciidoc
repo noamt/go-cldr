@@ -1,5 +1,7 @@
 = GO-CLDR
 
+image:https://circleci.com/gh/noamt/go-cldr.svg?style=svg["CircleCI", link="https://circleci.com/gh/noamt/go-cldr"]
+
 A (still partial) implementation of Unicode's CLDR in Go
 
 == Examples
