@@ -20,7 +20,7 @@ import (
 
 func main() {
     tag, _ := language.Parse("en-US")
-	region, _ := tag.Region()
+    region, _ := tag.Region()
     weekDay := supplemental.FirstDay.ByRegion(region)
     println("First day is", weekDay)
 }
