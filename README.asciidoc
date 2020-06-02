@@ -1,0 +1,32 @@
+= GO-CLDR
+
+A (still partial) implementation of Unicode's CLDR in Go
+
+== Examples
+
+=== Supplemental
+
+==== First Day
+Get the first day of the week for a given region.
+```
+package main
+
+import (
+    "github.com/noamt/go-cldr/supplemental"
+    "golang.org/x/text/language"
+)
+
+func main() {
+    tag, _ := language.Parse("en-US")
+	region, _ := tag.Region()
+    weekDay := supplemental.FirstDay.ByRegion(region)
+    println("First day is", weekDay)
+}
+```
+
+== Building
+
+```
+$ go generate
+$ go test -cover ./...
+```
