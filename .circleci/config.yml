@@ -1,0 +1,79 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: circleci/golang:1
+
+    working_directory: /go/src/github.com/noamt/go-cldr
+
+    environment: # environment variables for the build itself
+      GO111MODULE: "on"
+    steps:
+      - checkout
+      - restore_cache: # restores saved cache if no changes are detected since last run
+          keys:
+            - v1-pkg-cache
+      - run:
+          name: Downloading project dependecies
+          command: |
+            go mod download
+            go get -u github.com/jstemmer/go-junit-report
+            go get -u golang.org/x/lint/golint
+      - run:
+          name: Generate code
+          command: |
+            go generate
+      - run:
+          name: Run unit tests
+          command: |
+            mkdir -p test-results/go-test
+            trap "cat test_report | /go/bin/go-junit-report >test-results/go-test/results.xml" EXIT
+            go test -v -cover ./... 2>&1 | tee test_report
+      - store_test_results:
+          path: test-results
+      - run:
+          name: Run golint
+          command: /go/bin/golint -set_exit_status ./...
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - /go/pkg
+  release:
+    docker:
+      - image: circleci/golang:1
+
+    working_directory: /go/src/github.com/noamt/go-cldr
+
+    environment: # environment variables for the build itself
+      GO111MODULE: "on"
+    steps:
+      - checkout
+      - run:
+          name: Downloading project dependecies
+          command: |
+            go mod download
+            go get -u github.com/jstemmer/go-junit-report
+            go get -u golang.org/x/lint/golint
+      - run:
+          name: Generate code
+          command: |
+            go generate
+      - run:
+          name: Push release
+          command: |
+            version_to_release=${${CIRCLE_TAG}#"release-"}
+            git tag $version_to_release
+#            git push origin $version_to_release
+workflows:
+  version: 2
+  release:
+    jobs:
+      - release:
+          filters:
+            tags:
+              only: /^release-v.*/
+            branches:
+              ignore: /.*/
+  test:
+    jobs:
+      - test
