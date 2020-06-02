@@ -47,6 +47,9 @@ jobs:
     environment: # environment variables for the build itself
       GO111MODULE: "on"
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "60:5d:fd:85:fd:b5:51:f7:bd:54:67:53:89:ef:4d:4c"
       - checkout
       - run:
           name: Downloading project dependecies
