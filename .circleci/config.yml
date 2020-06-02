@@ -65,6 +65,7 @@ jobs:
           name: Push release
           command: |
             version_to_release=${CIRCLE_TAG#"release-"}
+            echo "Releasing version $version_to_release"
             git tag $version_to_release
 #            git push origin $version_to_release
 workflows:
