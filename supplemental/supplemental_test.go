@@ -16,8 +16,11 @@ func TestFirstDays_ByRegion(t *testing.T) {
 		args args
 		want time.Weekday
 	}{
-		{"NL", args{region: regionFromLocale("nl-NL")}, time.Monday},
+		{"Maldives", args{region: regionFromLocale("dv-MV")}, time.Friday},
+		{"United Arab Emirates", args{region: regionFromLocale("ar-AE")}, time.Saturday},
 		{"US", args{region: regionFromLocale("en-US")}, time.Sunday},
+		{"Netherlands", args{region: regionFromLocale("nl-NL")}, time.Monday},
+		{"Generic", args{region: language.Region{}}, time.Monday},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

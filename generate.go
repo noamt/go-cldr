@@ -121,18 +121,18 @@ import (
 
 const defaultTerritory = "001"
 
-var TerritoryFirstDays = map[string]string{
+var territoryFirstDays = map[string]string{
 {{ range $territory, $firstDay := .FirstDays }}"{{ $territory }}": "{{ $firstDay }}",
 {{ end }}
 }
 
-type FirstDays struct{}
-var FirstDay = FirstDays{}
+type firstDays struct{}
+var FirstDay = firstDays{}
 
-func (f *FirstDays) ByRegion(region language.Region) time.Weekday {
-	firstDay, ok := TerritoryFirstDays[region.String()]
+func (f *firstDays) ByRegion(region language.Region) time.Weekday {
+	firstDay, ok := territoryFirstDays[region.String()]
 	if !ok {
-		firstDay = TerritoryFirstDays[defaultTerritory]
+		firstDay = territoryFirstDays[defaultTerritory]
 	}
 
 	switch firstDay {
